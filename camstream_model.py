@@ -24,7 +24,7 @@ import numpy
 
 video_capture = cv2.VideoCapture(0)
 
-model_ft = torch.load("model_ft_3.pt")
+model_ft = torch.load("model_ft_4.pt")
 
 device = torch.device('cpu')
 
@@ -95,6 +95,7 @@ def pre_image(model):
         img_normalized = img_normalized.unsqueeze_(0)
         # input = Variable(image_tensor)
         img_normalized = img_normalized.to(device)
+        print("didn't crop")
         # print(img_normalized.shape)
 
     with torch.no_grad():
