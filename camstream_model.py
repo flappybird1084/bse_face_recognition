@@ -24,7 +24,7 @@ import numpy
 
 video_capture = cv2.VideoCapture(0)
 
-model_ft = torch.load("model_ft_4.pt")
+model_ft = torch.load("model_ft_5.pt")
 
 device = torch.device('cpu')
 
