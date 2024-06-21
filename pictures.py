@@ -5,7 +5,7 @@ import cv2
 import time
 
 video_capture = cv2.VideoCapture(0)
-folder = "./img/train/notrian/"
+folder = "./emotion_pictures/img/test/neutral/"
 
 counter = 0
 while True:
