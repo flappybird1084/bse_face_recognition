@@ -20,12 +20,12 @@ def transmit_message(message, ip, port):
 
 def monitor_for_message(port):
     process = subprocess.Popen("nc -l "+port, stdout=subprocess.PIPE,shell=True)
-    print(process.stdout.readlines())
-        
+    read = process.stdout.readlines()[3:-4]
+    print(read)        
 #transmit_message("nah id win","rianbutala","172.16.9.135", "/home/rianbutala/Desktop/face-recognition/bse_face_recognition", "pipassword")
 
-#transmit_message("nah id lose\n", "172.16.9.135", "1234")
+transmit_message("nah id lose\n", "172.16.9.135", "1234")
 
-monitor_for_message("1234")
+#monitor_for_message("1234")
 
 #transmit_message("nah id lose\n", "172.16.4.45", "1234")
