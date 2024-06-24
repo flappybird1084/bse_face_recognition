@@ -177,7 +177,8 @@ def pre_image():
         index = output.data.cpu().numpy().argmax()
         #print(index)
         print("\nmost likely: "+class_names[index])
-        transmit_message(("\nmost likely: "+class_names[index]) + "\n", TARGET_IP, TARGET_PORT)
+
+        #transmit_message(("\nmost likely: "+class_names[index]) + "\n", TARGET_IP, TARGET_PORT)
 
         #classes = train_ds.classes
         #class_name = classes[index]
@@ -187,9 +188,9 @@ def pre_image():
         output =model_ft_recognition(img_normalized_recognition)
         #print(output)
         #get_tensor_percentages(class_names, output)
-        index = output.data.cpu().numpy().argmax()
+        index_recognition = output.data.cpu().numpy().argmax()
         print("is rian" if index == 1 else "not rian")
-        transmit_message(("\nmost likely: "+class_names[index])+"\n"+("is rian" if index == 1 else "not rian") +"\n", TARGET_IP, TARGET_PORT)
+        transmit_message(("\nmost likely: "+class_names[index]+"\n"+"is rian" if index_recognition == 1 else "not rian") +"\n", TARGET_IP, TARGET_PORT)
 
         #print(index)
         #print("\nmost likely: "+class_names[index])
