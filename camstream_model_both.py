@@ -82,6 +82,8 @@ def get_tensor_percentages(class_names, tensor):
 
 def pre_image():
 
+    proceed = True
+
     print("\n")
 
     #img = Image.open(image_path)
@@ -109,6 +111,7 @@ def pre_image():
         cropped_img = pilcv2img.copy()
         cropped_img = cropped_img.crop(boxes[0])
     except:
+        proceed = False
         #print("caught!!")
         cropped_img = pilcv2img.copy()
         
@@ -153,10 +156,11 @@ def pre_image():
 
         img_normalized_recognition = img_normalized.to(device_recognition)
 
+
         # print(img_normalized.shape)
        
     except:
-        img_normalized = transform_norm(img).float()
+        '''img_normalized = transform_norm(img).float()
         img_normalized_emotion = transform_norm_bw(img.convert("L")).float()
 
 
@@ -165,38 +169,41 @@ def pre_image():
         
         img_normalized_emotion = img_normalized.to(device_emotion)
         img_normalized_recognition = img_normalized.to(device_recognition)
+'''
 
+        proceed = False
         #print("didn't crop")
         # print(img_normalized.shape)
 
     with torch.no_grad():
-        model_ft_emotion.eval()  
-        output =model_ft_emotion(img_normalized_emotion)
-        #print(output)
-        get_tensor_percentages(class_names, output)
-        index = output.data.cpu().numpy().argmax()
-        #print(index)
-        print("\nmost likely: "+class_names[index])
+        if proceed:
+            model_ft_emotion.eval()  
+            output =model_ft_emotion(img_normalized_emotion)
+            #print(output)
+            get_tensor_percentages(class_names, output)
+            index = output.data.cpu().numpy().argmax()
+            #print(index)
+            print("\nmost likely: "+class_names[index])
 
-        #transmit_message(("\nmost likely: "+class_names[index]) + "\n", TARGET_IP, TARGET_PORT)
+            #transmit_message(("\nmost likely: "+class_names[index]) + "\n", TARGET_IP, TARGET_PORT)
 
-        #classes = train_ds.classes
-        #class_name = classes[index]
-        #return class_name
+            #classes = train_ds.classes
+            #class_name = classes[index]
+            #return class_name
 
-        model_ft_recognition.eval()  
-        output =model_ft_recognition(img_normalized_recognition)
-        #print(output)
-        #get_tensor_percentages(class_names, output)
-        index_recognition = output.data.cpu().numpy().argmax()
-        print("is rian" if index == 1 else "not rian")
-        transmit_message(("\nmost likely: "+class_names[index]+"\n"+("is rian" if index_recognition == 1 else "not rian")) +"\n", TARGET_IP, TARGET_PORT)
+            model_ft_recognition.eval()  
+            output =model_ft_recognition(img_normalized_recognition)
+            #print(output)
+            #get_tensor_percentages(class_names, output)
+            index_recognition = output.data.cpu().numpy().argmax()
+            print("is rian" if index == 1 else "not rian")
+            transmit_message(("\nmost likely: "+class_names[index]+"\n"+("is rian" if index_recognition == 1 else "not rian")) +"\n", TARGET_IP, TARGET_PORT)
 
-        #print(index)
-        #print("\nmost likely: "+class_names[index])
-        #classes = train_ds.classes
-        #class_name = classes[index]
-        #return class_name
+            #print(index)
+            #print("\nmost likely: "+class_names[index])
+            #classes = train_ds.classes
+            #class_name = classes[index]
+            #return class_name
 
 _,img = video_capture.read()
 #cv2.imshow("Frame",img)
