@@ -15,7 +15,7 @@ def transmit_message(message, ip, port):
     message = message
     file.write(message)
     file.close()
-    subprocess.Popen("nc "+ip+" "+port+" < temp.txt", stdin=subprocess.PIPE, shell=True)
+    subprocess.Popen("nc "+ip+" "+port+" -w 1 < temp.txt", stdin=subprocess.PIPE, shell=True)
     os.popen("rm temp.txt")
 
 def monitor_for_message(port):
