@@ -36,6 +36,10 @@ device_recognition = torch.device('cpu')
 
 mtcnn = MTCNN(keep_all=True, device=torch.device('cpu'))
 
+TARGET_IP = "172.16.4.45"
+TARGET_PORT = "1234"
+
+
 def get_number_from_tensor(tensor):
     strtensor = str(tensor)
     preprocessed = ""
@@ -73,11 +77,12 @@ def get_tensor_percentages(class_names, tensor):
     #print(totalvalue)
     for count,i in enumerate(percentages[0]):
         print(class_names[count]+" - "+str(i*100)[:5]+"%")
-        transmit_message((class_names[count]+" - "+str(i*100)[:5]+"%"), "172.16.9.135", "1234")
-
+        
 
 def pre_image():
+
     print("\n")
+
     #img = Image.open(image_path)
     _,cv2img = video_capture.read()
     boxes, _ = mtcnn.detect(cv2img)
@@ -171,6 +176,8 @@ def pre_image():
         index = output.data.cpu().numpy().argmax()
         #print(index)
         print("\nmost likely: "+class_names[index])
+        transmit_message(("\nmost likely: "+class_names[index]) + "\n", TARGET_IP, TARGET_PORT)
+
         #classes = train_ds.classes
         #class_name = classes[index]
         #return class_name
@@ -181,6 +188,8 @@ def pre_image():
         #get_tensor_percentages(class_names, output)
         index = output.data.cpu().numpy().argmax()
         print("is rian" if index == 1 else "not rian")
+        transmit_message(("is rian" if index == 1 else "not rian") +"\n", TARGET_IP, TARGET_PORT)
+
         #print(index)
         #print("\nmost likely: "+class_names[index])
         #classes = train_ds.classes
