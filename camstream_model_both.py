@@ -84,8 +84,6 @@ def pre_image():
 
     proceed = True
 
-    print("\n")
-
     #img = Image.open(image_path)
     _,cv2img = video_capture.read()
     boxes, _ = mtcnn.detect(cv2img)
@@ -177,6 +175,8 @@ def pre_image():
 
     with torch.no_grad():
         if proceed:
+            print("\n")
+
             model_ft_emotion.eval()  
             output =model_ft_emotion(img_normalized_emotion)
             #print(output)
