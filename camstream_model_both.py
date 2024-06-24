@@ -22,6 +22,8 @@ from tempfile import TemporaryDirectory
 from facenet_pytorch import MTCNN
 import numpy
 
+from message_controller import transmit_message
+
 video_capture = cv2.VideoCapture(0)
 
 #model_ft = torch.load("model_ft_5.pt")
@@ -71,6 +73,7 @@ def get_tensor_percentages(class_names, tensor):
     #print(totalvalue)
     for count,i in enumerate(percentages[0]):
         print(class_names[count]+" - "+str(i*100)[:5]+"%")
+        transmit_message((class_names[count]+" - "+str(i*100)[:5]+"%"), "172.16.9.135", "1234")
 
 
 def pre_image():
