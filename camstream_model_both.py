@@ -36,6 +36,7 @@ device_recognition = torch.device('cpu')
 
 mtcnn = MTCNN(keep_all=True, device=torch.device('cpu'))
 
+#TARGET_IP = "172.16.9.135"
 TARGET_IP = "172.16.4.45"
 TARGET_PORT = "1234"
 

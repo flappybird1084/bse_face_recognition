@@ -25,7 +25,7 @@ def monitor_for_message(port):
     print(read)        
 #transmit_message("nah id win","rianbutala","172.16.9.135", "/home/rianbutala/Desktop/face-recognition/bse_face_recognition", "pipassword")
 
-transmit_message("please tell me this works bro\n", "172.16.9.135", "1234")
+#transmit_message("please tell me this works bro\n", "172.16.9.135", "1234")
 
 #monitor_for_message("1234")
 
