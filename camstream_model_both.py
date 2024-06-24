@@ -190,7 +190,7 @@ def pre_image():
         #get_tensor_percentages(class_names, output)
         index_recognition = output.data.cpu().numpy().argmax()
         print("is rian" if index == 1 else "not rian")
-        transmit_message(("\nmost likely: "+class_names[index]+"\n"+"is rian" if index_recognition == 1 else "not rian") +"\n", TARGET_IP, TARGET_PORT)
+        transmit_message(("\nmost likely: "+class_names[index]+"\n"+("is rian" if index_recognition == 1 else "not rian")) +"\n", TARGET_IP, TARGET_PORT)
 
         #print(index)
         #print("\nmost likely: "+class_names[index])
