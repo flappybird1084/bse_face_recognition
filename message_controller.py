@@ -10,13 +10,13 @@ import os, subprocess, time
     os.popen("rm temp.txt")'''
 
 def transmit_message(message, ip, port):
-    os.popen("touch temp.txt")
-    file = open("temp.txt", "w+")
+    os.popen("cd temp && touch temp_status_message.txt")
+    file = open("temp/temp_status_message.txt", "w+")
     message = message
     file.write(message)
     file.close()
-    subprocess.Popen("nc "+ip+" "+port+" -w 1 < temp.txt", stdin=subprocess.PIPE, shell=True)
-    os.popen("rm temp.txt")
+    subprocess.Popen("nc "+ip+" "+port+" -w 1 < temp/temp_status_message.txt", stdin=subprocess.PIPE, shell=True)
+    os.popen("rm temp/temp_status_message.txt")
 
 def monitor_for_message(port):
     process = subprocess.Popen("nc -l "+port, stdout=subprocess.PIPE,shell=True)

@@ -27,11 +27,11 @@ from message_controller import transmit_message
 video_capture = cv2.VideoCapture(0)
 
 #model_ft = torch.load("model_ft_5.pt")
-model_ft_emotion = torch.load("emotion_model_ft_mps.pt", map_location='cpu')
-model_ft_recognition = torch.load("model_ft_5.pt")
+model_ft_emotion = torch.load("models/emotion_model_ft_mps.pt", map_location='mps')
+model_ft_recognition = torch.load("models/model_ft_5.pt")
 
 #device = torch.device('cpu')
-device_emotion = torch.device('cpu')
+device_emotion = torch.device('mps')
 device_recognition = torch.device('cpu')
 
 mtcnn = MTCNN(keep_all=True, device=torch.device('cpu'))
@@ -130,6 +130,7 @@ def pre_image():
 
 
     cv2.imshow("rect-frame", open_cv_image)
+    cv2.imwrite("temp/streamlit_detection_image.jpg",open_cv_image)
     key = cv2.waitKey(1) & 0xff
 
 
