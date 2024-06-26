@@ -21,6 +21,7 @@ from PIL import Image, ImageDraw
 from tempfile import TemporaryDirectory
 from facenet_pytorch import MTCNN
 import numpy
+from datetime import datetime
 
 from message_controller import transmit_message
 
@@ -28,11 +29,11 @@ video_capture = cv2.VideoCapture(0)
 
 #model_ft = torch.load("model_ft_5.pt")
 model_ft_emotion = torch.load("models/emotion_model_ft_mps.pt", map_location='mps')
-model_ft_recognition = torch.load("models/model_ft_5.pt")
+model_ft_recognition = torch.load("models/model_ft_6_mps.pt", map_location='mps')
 
 #device = torch.device('cpu')
 device_emotion = torch.device('mps')
-device_recognition = torch.device('cpu')
+device_recognition = torch.device('mps')
 
 mtcnn = MTCNN(keep_all=True, device=torch.device('cpu'))
 
@@ -40,6 +41,8 @@ mtcnn = MTCNN(keep_all=True, device=torch.device('cpu'))
 TARGET_IP = "172.16.4.45"
 TARGET_PORT = "1234"
 
+session_directory = ""
+successful_detections = "000000000"
 
 def get_number_from_tensor(tensor):
     strtensor = str(tensor)
@@ -81,6 +84,7 @@ def get_tensor_percentages(class_names, tensor):
         
 
 def pre_image():
+    global successful_detections, session_directory
 
     proceed = True
 
@@ -205,6 +209,27 @@ def pre_image():
             #classes = train_ds.classes
             #class_name = classes[index]
             #return class_name
+            successful_detections = successful_detections+"1"
+            if len(successful_detections) > 100:
+                successful_detections = successful_detections[:-10] # crop list
+
+            if "0" not in successful_detections[-5:]: # if we have only faces detected in last 5 seconds open session
+                if session_directory == "":
+                    print("creating session directory")
+                    session_directory = "detection-"+str(datetime.now().strftime("%Y-%m-%d@%H:%M:%S.%f")) 
+                    os.popen("cd detections && mkdir "+session_directory)
+                    print("opening session directory "+session_directory)
+                filename = "image-"+str(datetime.now().strftime("%Y-%m-%d@%H:%M:%S.%f"))
+                cv2.imwrite("detections/"+session_directory+"/"+filename+".jpg", open_cv_image)
+        else:
+            transmit_message("\nmost likely: "+"[no face detected]"+"\n"+("not rian") +"\n", TARGET_IP, TARGET_PORT)
+            print("no face detected")
+            successful_detections = successful_detections+"0"
+            if len(successful_detections) > 100:
+                successful_detections = successful_detections[:-10]
+            
+            if "1" not in successful_detections[-5:]:
+                session_directory = ""
 
 _,img = video_capture.read()
 #cv2.imshow("Frame",img)
