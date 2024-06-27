@@ -17,11 +17,12 @@ from torchvision import datasets, models, transforms
 import matplotlib.pyplot as plt
 import time
 import os
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 from tempfile import TemporaryDirectory
 from facenet_pytorch import MTCNN
 import numpy
 from datetime import datetime
+from threading import Thread
 
 from message_controller import transmit_message
 from videoutils import compile_video
@@ -84,6 +85,15 @@ def get_tensor_percentages(class_names, tensor):
         print(class_names[count]+" - "+str(i*100)[:5]+"%")
         
 
+def convert_directory_to_video(session_directory):
+    print("trying to compile video")
+    compile_video(session_directory, True) #true/false determines if verbose or not for video compilation
+    print("video compiled!!")
+    print("removing image directory...")
+    os.popen("rm -rf detections/"+session_directory)
+    #os.popen("rmdir detections/"+session_directory)
+    print("directory removed!!")
+
 def pre_image():
     global successful_detections, session_directory
 
@@ -131,12 +141,6 @@ def pre_image():
         pass
     open_cv_image2 = numpy.array(img2)
     open_cv_image2 = open_cv_image2[:, :, ::-1].copy()
-
-
-
-    cv2.imshow("rect-frame", open_cv_image)
-    cv2.imwrite("temp/streamlit_detection_image.jpg",open_cv_image)
-    key = cv2.waitKey(1) & 0xff
 
 
     mean = [0.485, 0.456, 0.406] 
@@ -205,6 +209,9 @@ def pre_image():
             print("is rian" if index_recognition == 1 else "not rian")
             transmit_message(("\nmost likely: "+class_names[index]+"\n"+("is rian" if index_recognition == 1 else "not rian")) +"\n", TARGET_IP, TARGET_PORT)
 
+            font = ImageFont.truetype(r'SimplyMono-Book.ttf',30)
+            draw.text(xy=(boxes[0][0],boxes[0][1]),text=("is rian" if index_recognition == 1 else "not rian")+"\n"+"most likely: "+class_names[index],font=font)
+
             #print(index)
             #print("\nmost likely: "+class_names[index])
             #classes = train_ds.classes
@@ -214,6 +221,9 @@ def pre_image():
             if len(successful_detections) > 100:
                 successful_detections = successful_detections[:-10] # crop list
 
+            open_cv_image_3 = numpy.array(frame_draw)
+            open_cv_image_3 = open_cv_image_3[:, :, ::-1].copy()
+
             if "0" not in successful_detections[-5:]: # if we have only faces detected in last 5 seconds open session
                 if session_directory == "":
                     print("creating session directory")
@@ -221,7 +231,7 @@ def pre_image():
                     os.popen("cd detections && mkdir "+session_directory)
                     print("opening session directory "+session_directory)
                 filename = "image-"+str(datetime.now().strftime("%Y-%m-%d@%H:%M:%S.%f"))
-                cv2.imwrite("detections/"+session_directory+"/"+filename+".jpg", open_cv_image)
+                cv2.imwrite("detections/"+session_directory+"/"+filename+".jpg", open_cv_image_3)
         else:
             transmit_message("\nmost likely: "+"[no face detected]"+"\n"+("not rian") +"\n", TARGET_IP, TARGET_PORT)
             print("no face detected")
@@ -231,16 +241,23 @@ def pre_image():
             
             if "1" not in successful_detections[-5:] and session_directory != "":
                 try:
-                    print("trying to compile video")
-                    compile_video(session_directory, False)
-                    print("video compiled!!")
-                    print("removing image directory...")
-                    os.popen("rm -rf detections/"+session_directory)
-                    os.popen("rmdir detections/"+session_directory)
-                    print("directory removed!!")
+                    t = Thread(target=convert_directory_to_video(session_directory))
+                    t.start()
                 except:
                     pass
                 session_directory = ""
+
+        open_cv_image_3 = numpy.array(frame_draw)
+        open_cv_image_3 = open_cv_image_3[:, :, ::-1].copy()
+        cv2.imshow("rect-frame", open_cv_image_3)
+        cv2.imwrite("temp/streamlit_detection_image.jpg",open_cv_image_3)
+        key = cv2.waitKey(1) & 0xff
+
+
+    #executes after image recognition i done
+    # cv2.imshow("rect-frame", open_cv_image)
+    # cv2.imwrite("temp/streamlit_detection_image.jpg",open_cv_image)
+    # key = cv2.waitKey(1) & 0xff
 
 _,img = video_capture.read()
 #cv2.imshow("Frame",img)

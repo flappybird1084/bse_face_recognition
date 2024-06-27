@@ -40,6 +40,8 @@ def compile_video(directory_name, verbose):
         print(tuple(i for i in minuteslist))
     fps = 1/get_avg_diff(minuteslist, verbose)
     target_fps = fps
+    if verbose:
+        print("fps generated: "+str(target_fps))
 
     frame = cv2.imread(os.path.join(image_folder, images[0]))
     height, width, layers = frame.shape
@@ -47,6 +49,7 @@ def compile_video(directory_name, verbose):
     video = cv2.VideoWriter(video_name, cv2.VideoWriter.fourcc(*'mp4v'), target_fps, (width,height), True)
     #os.popen("ffmpeg -framerate "+str(target_fps)+"-i "+image_folder+"image-%d.jpg -c:v libx264 -r 30 output.mp4")
 
+    images = sorted(images)
     for image in images:
         video.write(cv2.imread(os.path.join(image_folder, image)))
 
