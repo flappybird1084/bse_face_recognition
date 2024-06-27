@@ -24,6 +24,7 @@ import numpy
 from datetime import datetime
 
 from message_controller import transmit_message
+from videoutils import compile_video
 
 video_capture = cv2.VideoCapture(0)
 
@@ -228,7 +229,17 @@ def pre_image():
             if len(successful_detections) > 100:
                 successful_detections = successful_detections[:-10]
             
-            if "1" not in successful_detections[-5:]:
+            if "1" not in successful_detections[-5:] and session_directory != "":
+                try:
+                    print("trying to compile video")
+                    compile_video(session_directory, False)
+                    print("video compiled!!")
+                    print("removing image directory...")
+                    os.popen("rm -rf detections/"+session_directory)
+                    os.popen("rmdir detections/"+session_directory)
+                    print("directory removed!!")
+                except:
+                    pass
                 session_directory = ""
 
 _,img = video_capture.read()
