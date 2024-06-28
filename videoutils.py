@@ -1,5 +1,5 @@
 import cv2
-import os
+import os, subprocess
 
 def get_avg_diff(inp_list, verbose):
     target_list = []
@@ -21,39 +21,49 @@ def get_avg_diff(inp_list, verbose):
 
 
 def compile_video(directory_name, verbose):
-    target_fps = 0
+    try:
+        target_fps = 0
 
-    image_folder = 'detections/'+directory_name+"/"
-    video_name = 'detections/videos/'+directory_name+'.mp4'
+        image_folder = 'detections/'+directory_name+"/"
+        video_name = 'detections/videos/cv'+directory_name+'.mp4'
+        final_video_name = 'detections/videos/'+directory_name+'.mp4'
+        print(f"Video name: {video_name}. FFMPEG video name: {final_video_name}")
 
-    images = []
-    minuteslist = []
-    for img in os.listdir(image_folder):
-        images.append(img)
-        seconds = (int(img[-13:-11]+img[-10:-4])/1000000) #convert filenames into seconds
+        images = []
+        minuteslist = []
+        for img in os.listdir(image_folder):
+            images.append(img)
+            seconds = (int(img[-13:-11]+img[-10:-4])/1000000) #convert filenames into seconds
+            if verbose:
+                print(img)
+            minutes = (seconds+60*int(img[-16:-14])) #converts minutes to seconds
+            minuteslist.append(minutes)
+        minuteslist = sorted(minuteslist)
         if verbose:
-            print(img)
-        minutes = (seconds+60*int(img[-16:-14])) #converts minutes to seconds
-        minuteslist.append(minutes)
-    minuteslist = sorted(minuteslist)
-    if verbose:
-        print(tuple(i for i in minuteslist))
-    fps = 1/get_avg_diff(minuteslist, verbose)
-    target_fps = fps
-    if verbose:
-        print("fps generated: "+str(target_fps))
+            print(tuple(i for i in minuteslist))
+        fps = 1/get_avg_diff(minuteslist, verbose)
+        target_fps = fps
+        if verbose:
+            print("fps generated: "+str(target_fps))
 
-    frame = cv2.imread(os.path.join(image_folder, images[0]))
-    height, width, layers = frame.shape
+        frame = cv2.imread(os.path.join(image_folder, images[0]))
+        height, width, layers = frame.shape
 
-    video = cv2.VideoWriter(video_name, cv2.VideoWriter.fourcc(*'mp4v'), target_fps, (width,height), True)
-    #os.popen("ffmpeg -framerate "+str(target_fps)+"-i "+image_folder+"image-%d.jpg -c:v libx264 -r 30 output.mp4")
+        video = cv2.VideoWriter(video_name, cv2.VideoWriter.fourcc(*'mp4v'), target_fps, (width,height), True)
+        #os.popen("ffmpeg -framerate "+str(target_fps)+"-i "+image_folder+"image-%d.jpg -c:v libx264 -r 30 output.mp4")
 
-    images = sorted(images)
-    for image in images:
-        video.write(cv2.imread(os.path.join(image_folder, image)))
+        images = sorted(images)
+        for image in images:
+            video.write(cv2.imread(os.path.join(image_folder, image)))
 
-    cv2.destroyAllWindows()
-    video.release()
+        cv2.destroyAllWindows()
+        video.release()
+
+        print("ffmpeg starting")
+        process = subprocess.call(["ffmpeg -i "+video_name+" -vcodec libx264 "+final_video_name], stdout=subprocess.PIPE, shell=True)
+        process = subprocess.call(["rm "+video_name], stdout=subprocess.PIPE, shell=True)
+        print("ffmpeg ended. video removed.")
+    except:
+        print("critical error!!")
 
 #compile_video("detection-2024-06-26@16:22:17.826271")

@@ -16,7 +16,7 @@ import torchvision
 from torchvision import datasets, models, transforms
 import matplotlib.pyplot as plt
 import time
-import os
+import os, subprocess
 from PIL import Image, ImageDraw, ImageFont
 from tempfile import TemporaryDirectory
 from facenet_pytorch import MTCNN
@@ -261,6 +261,20 @@ def pre_image():
 
 _,img = video_capture.read()
 #cv2.imshow("Frame",img)
+
+
+#code to compile all uncompiled videos at start of program
+
+uncompiled_folders = []
+process = subprocess.Popen(["cd detections/ && ls"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+stdout, stderr = process.communicate()
+
+for i in stdout.split(bytes("\n", encoding="utf8")):
+    uncompiled_folders.append(i.decode())
+uncompiled_folders = uncompiled_folders[:-2]
+print(uncompiled_folders)
+for i in uncompiled_folders:
+    convert_directory_to_video(i)
 
 while(True):
     pre_image()
