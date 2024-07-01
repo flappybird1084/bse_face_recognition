@@ -30,12 +30,16 @@ from videoutils import compile_video
 video_capture = cv2.VideoCapture(0)
 
 #model_ft = torch.load("model_ft_5.pt")
-model_ft_emotion = torch.load("models/emotion_model_ft_mps.pt", map_location='mps')
-model_ft_recognition = torch.load("models/model_ft_6_mps.pt", map_location='mps')
+
+device_str_emotion = 'cpu'
+device_str_recognition = 'cpu'
+
+model_ft_emotion = torch.load("models/emotion_model_ft_mps.pt", map_location=device_str_emotion)
+model_ft_recognition = torch.load("models/model_ft_6_mps.pt", map_location=device_str_recognition)
 
 #device = torch.device('cpu')
-device_emotion = torch.device('mps')
-device_recognition = torch.device('mps')
+device_emotion = torch.device(device_str_emotion)
+device_recognition = torch.device(device_str_recognition)
 
 mtcnn = MTCNN(keep_all=True, device=torch.device('cpu'))
 
