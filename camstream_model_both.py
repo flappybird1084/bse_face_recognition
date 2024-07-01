@@ -25,17 +25,17 @@ from datetime import datetime
 from threading import Thread
 
 from message_controller import transmit_message
-from videoutils import compile_video
+from videoutils import compile_video, autoremove_old_files
 
 video_capture = cv2.VideoCapture(0)
 
 #model_ft = torch.load("model_ft_5.pt")
 
-device_str_emotion = 'cpu'
-device_str_recognition = 'cpu'
+device_str_emotion = 'mps'
+device_str_recognition = 'mps'
 
 model_ft_emotion = torch.load("models/emotion_model_ft_mps.pt", map_location=device_str_emotion)
-model_ft_recognition = torch.load("models/model_ft_6_mps.pt", map_location=device_str_recognition)
+model_ft_recognition = torch.load("models/model_ft_7_mps.pt", map_location=device_str_recognition)
 
 #device = torch.device('cpu')
 device_emotion = torch.device(device_str_emotion)
@@ -229,27 +229,31 @@ def pre_image():
             open_cv_image_3 = open_cv_image_3[:, :, ::-1].copy()
 
             if "0" not in successful_detections[-5:]: # if we have only faces detected in last 5 seconds open session
-                if session_directory == "":
+                if session_directory == "": #make directory for session
                     print("creating session directory")
                     session_directory = "detection-"+str(datetime.now().strftime("%Y-%m-%d@%H:%M:%S.%f")) 
                     os.popen("cd detections && mkdir "+session_directory)
                     print("opening session directory "+session_directory)
-                filename = "image-"+str(datetime.now().strftime("%Y-%m-%d@%H:%M:%S.%f"))
+                filename = "image-"+str(datetime.now().strftime("%Y-%m-%d@%H:%M:%S.%f")) # save image
                 cv2.imwrite("detections/"+session_directory+"/"+filename+".jpg", open_cv_image_3)
+
+
+                autoremove_old_files("./detections/videos/", 7, False) #clean up old videos. not really peak efficiency 
+
         else:
-            transmit_message("\nmost likely: "+"[no face detected]"+"\n"+("not rian") +"\n", TARGET_IP, TARGET_PORT)
+            transmit_message("\nmost likely: "+"[no face detected]"+"\n"+("not rian") +"\n", TARGET_IP, TARGET_PORT) #send message to port
             print("no face detected")
-            successful_detections = successful_detections+"0"
+            successful_detections = successful_detections+"0" #compile video if no faces detected
             if len(successful_detections) > 100:
                 successful_detections = successful_detections[:-10]
             
             if "1" not in successful_detections[-5:] and session_directory != "":
                 try:
-                    t = Thread(target=convert_directory_to_video(session_directory))
+                    t = Thread(target=convert_directory_to_video(session_directory)) #start compilation thread
                     t.start()
                 except:
                     pass
-                session_directory = ""
+                session_directory = "" #reset session directory name
 
         open_cv_image_3 = numpy.array(frame_draw)
         open_cv_image_3 = open_cv_image_3[:, :, ::-1].copy()

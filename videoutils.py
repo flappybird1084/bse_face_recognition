@@ -66,4 +66,64 @@ def compile_video(directory_name, verbose):
     except:
         print("critical error!!")
 
+def get_date(filename, verbose):
+    index_dash = 0
+    index_atsign = 0
+
+    for count, i in enumerate(filename):
+        if i == "-" and index_dash == 0:
+            index_dash = count
+        if i == "@" and index_atsign == 0:
+            index_atsign = count
+
+    if verbose:
+        print(filename[index_dash+1:index_atsign].split("-")) # 2024, 06, 26: y/m/d
+
+    return (filename[index_dash+1:index_atsign].split("-")) 
+
+def is_file_too_old(baseline, comparison, days, verbose): #with some caveats. for simplicity if year or month doesnt match it says too old. 
+    if verbose:
+        print(f"checking to see if {comparison} is {days} days older than {baseline}")
+
+    date_baseline = get_date(baseline, verbose)
+    date_comparison = get_date(comparison, verbose)
+
+    if int(date_baseline[0]) - int(date_comparison[0]) != 0: #if year is different
+        if verbose:
+            print ("year mismatch!!")
+        return True
+    
+    if int(date_baseline[1]) - int(date_comparison[1]) != 0: #if month is different
+        if verbose:
+            print ("month mismatch!!")
+        return True
+    else:
+        is_date_mismatch = int(date_baseline[2]) - int(date_comparison[2]) > days
+        if verbose:
+            if is_date_mismatch:
+                print("date mismatch!!")
+            else:
+                print("file fits criteria!!")
+        return is_date_mismatch
+
 #compile_video("detection-2024-06-26@16:22:17.826271")
+#get_date("detection-2024-06-26@16:22:17.826271")
+
+#print(is_file_too_old("detection-2024-07-01@16:22:17.826271", "detection-2024-06-26@16:22:17.826271", 7, True))
+
+def autoremove_old_files(directory_name, days, verbose):
+    process = subprocess.Popen([f"ls {directory_name}"], shell=True, stdout=subprocess.PIPE)
+
+    files = tuple(i.decode()[:-1] for i in process.stdout.readlines()) # old output looked like ('detection-2024-06-01@13:03:18.445190.mp4\n', 'detection-2024-07-01@13:04:49.685851.mp4\n', 'detection-2024-07-01@13:09:39.390657.mp4\n') and had to remove \n
+
+    if verbose:
+        print(files)
+
+    for i in files:
+        if is_file_too_old(files[-1], i, days, verbose):
+            print(f"{i} too old!!")
+            os.popen(f"rm {directory_name}{i}")
+            print(f"{directory_name}{i} removed!!")
+    
+
+autoremove_old_files("./detections/videos/", 7, False)
