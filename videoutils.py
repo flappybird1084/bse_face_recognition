@@ -107,7 +107,7 @@ def is_file_too_old(baseline, comparison, days, verbose): #with some caveats. fo
                 print("file fits criteria!!")
         return is_date_mismatch
 
-compile_video("wdetection-2024-07-01@15:04:43.236809", True)
+#compile_video("wdetection-2024-07-01@15:04:43.236809", True)
 #get_date("detection-2024-06-26@16:22:17.826271")
 
 #print(is_file_too_old("detection-2024-07-01@16:22:17.826271", "detection-2024-06-26@16:22:17.826271", 7, True))
