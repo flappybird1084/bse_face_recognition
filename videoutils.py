@@ -30,18 +30,19 @@ def compile_video(directory_name, verbose):
         print(f"Video name: {video_name}. FFMPEG video name: {final_video_name}")
 
         images = []
-        minuteslist = []
+        secondslist = []
         for img in os.listdir(image_folder):
             images.append(img)
             seconds = (int(img[-13:-11]+img[-10:-4])/1000000) #convert filenames into seconds
             if verbose:
                 print(img)
             minutes = (seconds+60*int(img[-16:-14])) #converts minutes to seconds
-            minuteslist.append(minutes)
-        minuteslist = sorted(minuteslist)
+            minutes = minutes+60*60*int(img[-19:-17])
+            secondslist.append(minutes)
+        secondslist = sorted(secondslist)
         if verbose:
-            print(tuple(i for i in minuteslist))
-        fps = 1/get_avg_diff(minuteslist, verbose)
+            print(tuple(i for i in secondslist))
+        fps = 1/get_avg_diff(secondslist, verbose)
         target_fps = fps
         if verbose:
             print("fps generated: "+str(target_fps))
@@ -106,7 +107,7 @@ def is_file_too_old(baseline, comparison, days, verbose): #with some caveats. fo
                 print("file fits criteria!!")
         return is_date_mismatch
 
-#compile_video("detection-2024-06-26@16:22:17.826271")
+compile_video("wdetection-2024-07-01@15:04:43.236809", True)
 #get_date("detection-2024-06-26@16:22:17.826271")
 
 #print(is_file_too_old("detection-2024-07-01@16:22:17.826271", "detection-2024-06-26@16:22:17.826271", 7, True))
@@ -126,4 +127,4 @@ def autoremove_old_files(directory_name, days, verbose):
             print(f"{directory_name}{i} removed!!")
     
 
-autoremove_old_files("./detections/videos/", 7, False)
+#autoremove_old_files("./detections/videos/", 7, False)

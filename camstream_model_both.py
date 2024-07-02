@@ -31,8 +31,8 @@ video_capture = cv2.VideoCapture(0)
 
 #model_ft = torch.load("model_ft_5.pt")
 
-device_str_emotion = 'mps'
-device_str_recognition = 'mps'
+device_str_emotion = 'cpu'
+device_str_recognition = 'cpu'
 
 model_ft_emotion = torch.load("models/emotion_model_ft_mps.pt", map_location=device_str_emotion)
 model_ft_recognition = torch.load("models/model_ft_7_mps.pt", map_location=device_str_recognition)
