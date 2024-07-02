@@ -1,0 +1,19 @@
+qt.qpa.plugin: Could not find the Qt platform plugin "wayland" in "/home/rianbutala/.pyenv/versions/3.12.4/lib/python3.12/site-packages/cv2/qt/plugins"
+/home/rianbutala/.pyenv/versions/3.12.4/bin/python3: can't open file '/home/rianbutala/Desktop/face-recognition-pi2/bse_face_recognition/camstream_model': [Errno 2] No such file or directory
+qt.qpa.xcb: could not connect to display 
+qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "/home/rianbutala/.pyenv/versions/3.12.4/lib/python3.12/site-packages/cv2/qt/plugins" even though it was found.
+This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
+
+Available platform plugins are: xcb.
+
+Traceback (most recent call last):
+  File "/home/rianbutala/Desktop/face-recognition-pi2/bse_face_recognition/camstream_model_both.py", line 1, in <module>
+    import torchvision.transforms as transforms
+ModuleNotFoundError: No module named 'torchvision'
+Traceback (most recent call last):
+  File "/home/rianbutala/Desktop/face-recognition-pi2/bse_face_recognition/camstream_model_both.py", line 1, in <module>
+    import torchvision.transforms as transforms
+ModuleNotFoundError: No module named 'torchvision'
+
+also: DISPLAY=:0 /home/rianbutala/.pyenv/shims/python3 camstream_model_both.py 
+works!
