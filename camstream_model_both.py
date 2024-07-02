@@ -257,7 +257,10 @@ def pre_image():
 
         open_cv_image_3 = numpy.array(frame_draw)
         open_cv_image_3 = open_cv_image_3[:, :, ::-1].copy()
-        cv2.imshow("rect-frame", open_cv_image_3)
+
+        temp_ocvimg = cv2.imread("tester_image.jpeg")
+
+        cv2.imshow("rect-frame", temp_ocvimg)
         cv2.imwrite("temp/streamlit_detection_image.jpg",open_cv_image_3)
         key = cv2.waitKey(1) & 0xff
 
