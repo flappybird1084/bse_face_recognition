@@ -256,7 +256,7 @@ def pre_image():
                 session_directory = "" #reset session directory name
 
         open_cv_image_3 = numpy.array(frame_draw)
-        #open_cv_image_3 = open_cv_image_3[:, :, ::-1].copy()
+        open_cv_image_3 = open_cv_image_3[:, :, ::-1].copy()
 
         cv2.imshow("rect-frame", open_cv_image_3)
         cv2.imwrite("temp/streamlit_detection_image.jpg",open_cv_image_3)
