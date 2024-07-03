@@ -16,7 +16,7 @@ import torchvision
 from torchvision import datasets, models, transforms
 import matplotlib.pyplot as plt
 import time
-import os, subprocess
+import os, subprocess, sys
 from PIL import Image, ImageDraw, ImageFont
 from tempfile import TemporaryDirectory
 from facenet_pytorch import MTCNN
@@ -26,6 +26,11 @@ from threading import Thread
 
 from message_controller import transmit_message
 from videoutils import compile_video, autoremove_old_files
+
+
+run_headless = sys.argv[1] == "--headless"
+if run_headless:
+    print("running headless:")
 
 video_capture = cv2.VideoCapture(0)
 
@@ -258,7 +263,9 @@ def pre_image():
         open_cv_image_3 = numpy.array(frame_draw)
         open_cv_image_3 = open_cv_image_3[:, :, ::-1].copy()
 
-        cv2.imshow("rect-frame", open_cv_image_3)
+        if not run_headless:
+            cv2.imshow("rect-frame", open_cv_image_3)
+            
         cv2.imwrite("temp/streamlit_detection_image.jpg",open_cv_image_3)
         key = cv2.waitKey(1) & 0xff
 
