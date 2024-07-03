@@ -1,5 +1,5 @@
 #!/bin/bash
 
-nohup python3 camstream_model_both.py &
+python3 camstream_model_both.py &
 cd streamlit/
 streamlit run Main_Page.py & 
