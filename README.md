@@ -26,3 +26,4 @@ If you want to retrain face recognition on your own images: <br>
 Cool stuff I learned:
 - ```pgrep -a python3``` does a grep on only processes named python3 (for killing nohup) and ```pgrep python3``` will return only process id
 - ```whatis crontab``` (shell) shows list of available man pages -> ```man 5 crontab```
+- cron script to run all files on restart: ```@reboot bash /home/rianbutala/Desktop/face-recognition-pi2/bse_face_recognition/deploy_all.sh```
