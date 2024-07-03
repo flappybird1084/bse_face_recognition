@@ -265,9 +265,10 @@ def pre_image():
 
         if not run_headless:
             cv2.imshow("rect-frame", open_cv_image_3)
-            
+            key = cv2.waitKey(1) & 0xff
+
         cv2.imwrite("temp/streamlit_detection_image.jpg",open_cv_image_3)
-        key = cv2.waitKey(1) & 0xff
+        
 
 
     #executes after image recognition i done
