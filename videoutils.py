@@ -126,6 +126,24 @@ def autoremove_old_files(directory_name, days, verbose):
             print(f"{i} too old!!")
             os.popen(f"rm {directory_name}{i}")
             print(f"{directory_name}{i} removed!!")
+
+def recompile_video_to_h264(video_name, new_video_name, directory_name): # assume video starts with cvdetection....
+    final_video_name = new_video_name
+    print("ffmpeg starting")
+    process = subprocess.call(["yes | ffmpeg -i "+directory_name+"/"+video_name+" -vcodec libx264 "+directory_name+"/"+final_video_name], stdout=subprocess.PIPE, shell=True)
+    process = subprocess.call(["rm "+directory_name+"/"+video_name], stdout=subprocess.PIPE, shell=True)
+    print("ffmpeg ended. video removed.")
+
+def recompile_all_cvdetections(directory_name):
+    process = subprocess.Popen([f"ls {directory_name}"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    stdout, stderr = process.communicate()
+    stdout = stdout.split(bytes('\n', encoding='utf8'))
+    for i in stdout:
+        i = i.decode()
+        if "cvdetection" in i:
+            recompile_video_to_h264(i, i[2:], directory_name)
+    print(stdout)
     
 
 #autoremove_old_files("./detections/videos/", 7, False)
+recompile_all_cvdetections("detections/videos")
