@@ -24,4 +24,4 @@ If you want to retrain face recognition on your own images: <br>
 - Then rerun transfer_learning_main.ipynb (make sure to specify a device to train on, like 'cpu', 'mps' (apple gpu) or 'cuda'.
 
 Cool stuff I learned:
-- pgrep -a python3 does a grep on only processes named python3 (for killing nohup)
+- ```pgrep -a python3``` does a grep on only processes named python3 (for killing nohup)
