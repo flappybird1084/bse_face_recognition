@@ -64,8 +64,9 @@ def compile_video(directory_name, verbose):
         process = subprocess.call(["ffmpeg -i "+video_name+" -vcodec libx264 "+final_video_name], stdout=subprocess.PIPE, shell=True)
         process = subprocess.call(["rm "+video_name], stdout=subprocess.PIPE, shell=True)
         print("ffmpeg ended. video removed.")
-    except:
+    except Exception as e:
         print("critical error!!")
+        print(e)
 
 def get_date(filename, verbose):
     index_dash = 0
