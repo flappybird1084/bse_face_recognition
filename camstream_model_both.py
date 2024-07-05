@@ -25,7 +25,7 @@ from datetime import datetime
 from threading import Thread
 
 from message_controller import transmit_message
-from videoutils import compile_video, autoremove_old_files
+from videoutils import compile_video, autoremove_old_files, recompile_all_cvdetections
 
 
 run_headless = sys.argv[1] == "--headless"
@@ -105,6 +105,8 @@ def convert_directory_to_video(session_directory):
 
 def pre_image():
     global successful_detections, session_directory
+
+    recompile_all_cvdetections("detections/videos")
 
     proceed = True
 
