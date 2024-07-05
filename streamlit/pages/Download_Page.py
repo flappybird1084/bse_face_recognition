@@ -28,7 +28,7 @@ for count, i in enumerate(video_names):
     delete = st.button("Delete Video", key=count)
     if delete:
         os.popen("rm ../detections/videos/"+i)
-        st.experimental_rerun()
+        st.rerun()
 
     st.write("\n")
     
