@@ -21,11 +21,17 @@ video_names = video_names[:-1]
 print(video_names)
 
 #videos = []
-for i in video_names:
+for count, i in enumerate(video_names):
     #videos.append(open("../detections/videos/"+i, "rb"))
     st.video(open("../detections/videos/"+i, "rb").read())
     st.download_button(f"Download {i}",open("../detections/videos/"+i, "rb"), i)
+    delete = st.button("Delete Video", key=count)
+    if delete:
+        os.popen("rm ../detections/videos/"+i)
+        st.experimental_rerun()
+
     st.write("\n")
+    
     
 
 
