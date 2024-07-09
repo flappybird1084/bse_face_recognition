@@ -134,7 +134,7 @@ def recompile_video_to_h264(video_name, new_video_name, directory_name): # assum
     process = subprocess.call(["rm "+directory_name+"/"+video_name], stdout=subprocess.PIPE, shell=True)
     print("ffmpeg ended. video removed.")
 
-def recompile_all_cvdetections(directory_name):
+def recompile_all_cvdetections(directory_name, verbose):
     process = subprocess.Popen([f"ls {directory_name}"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     stdout, stderr = process.communicate()
     stdout = stdout.split(bytes('\n', encoding='utf8'))
@@ -142,8 +142,9 @@ def recompile_all_cvdetections(directory_name):
         i = i.decode()
         if "cvdetection" in i:
             recompile_video_to_h264(i, i[2:], directory_name)
-    print(stdout)
+    if verbose:
+        print(stdout)
     
 
 #autoremove_old_files("./detections/videos/", 7, False)
-recompile_all_cvdetections("detections/videos")
+#recompile_all_cvdetections("detections/videos", False)

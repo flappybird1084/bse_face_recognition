@@ -1,24 +1,22 @@
+#import torchvision.datasets as datasets
+#from torch.utils.data import DataLoader,Dataset
+#import matplotlib.pyplot as plt
+#import numpy as np
+#import time
+#import torch.nn as nn
+#import torch.optim as optim
+#from torch.optim import lr_scheduler
+#import torch.backends.cudnn as cudnn
+#from tempfile import TemporaryDirectory
+
 import torchvision.transforms as transforms
-import torchvision.datasets as datasets
-from torch.utils.data import DataLoader,Dataset
+import torchvision.transforms as transforms
 from PIL import Image
-import matplotlib.pyplot as plt
-import numpy as np
 import cv2
-import time
 import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.optim import lr_scheduler
-import torch.backends.cudnn as cudnn
-import numpy as np
-import torchvision
 from torchvision import datasets, models, transforms
-import matplotlib.pyplot as plt
-import time
 import os, subprocess, sys
 from PIL import Image, ImageDraw, ImageFont
-from tempfile import TemporaryDirectory
 from facenet_pytorch import MTCNN
 import numpy
 from datetime import datetime
@@ -27,10 +25,12 @@ from threading import Thread
 from message_controller import transmit_message
 from videoutils import compile_video, autoremove_old_files, recompile_all_cvdetections
 
-
-run_headless = sys.argv[1] == "--headless"
-if run_headless:
-    print("running headless:")
+try:
+    run_headless = sys.argv[1] == "--headless"
+    if run_headless:
+        print("running headless:")
+except:
+    run_headless = False
 
 video_capture = cv2.VideoCapture(0)
 
@@ -106,7 +106,7 @@ def convert_directory_to_video(session_directory):
 def pre_image():
     global successful_detections, session_directory
 
-    recompile_all_cvdetections("detections/videos")
+    recompile_all_cvdetections("detections/videos", False)
 
     proceed = True
 
