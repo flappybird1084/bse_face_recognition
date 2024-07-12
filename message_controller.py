@@ -34,6 +34,8 @@ def monitor_for_image(port):
     #lines = process.stdout.readlines()
     #print(f"lines: {lines}")
     print("something happened. hopefully image transfer happened.")
+    process = subprocess.Popen("mv temp/streamlit_detection_image_2.jpg temp/streamlit_detection_image.jpg", shell = True)
+    print("file renamed")
     #transmit_message("nah id win","rianbutala","172.16.9.135", "/home/rianbutala/Desktop/face-recognition/bse_face_recognition", "pipassword")
 
 #transmit_message("please tell me this works bro\n", "172.16.9.135", "1234")
