@@ -29,7 +29,7 @@ def transmit_image(image_path, ip, port):
 
 
 def monitor_for_image(port):
-    process = subprocess.Popen("nc -l "+port+" > temp/streamlit_detection_image_2.jpg", shell = True)
+    process = subprocess.call("nc -l "+port+" > temp/streamlit_detection_image_2.jpg", shell = True)
     #transmit_message("nah id win","rianbutala","172.16.9.135", "/home/rianbutala/Desktop/face-recognition/bse_face_recognition", "pipassword")
 
 #transmit_message("please tell me this works bro\n", "172.16.9.135", "1234")
