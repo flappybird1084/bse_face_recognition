@@ -22,14 +22,19 @@ def monitor_for_message(port):
     process = subprocess.Popen("nc -l "+port, stdout=subprocess.PIPE,shell=True)
     read = str(process.stdout.readlines())[3:-4]
     #raw output: [b'nah id lose\n']
-    print(read)        
+    print(read) 
 
 def transmit_image(image_path, ip, port):
     subprocess.Popen("nc "+ip+" "+port+" -w 1 < "+image_path, stdin=subprocess.PIPE, shell=True)
 
 
 def monitor_for_image(port):
-    process = subprocess.call("nc -l "+port+" > temp/streamlit_detection_image_2.jpg", shell = True)
+    print("debug: monitoring for image")
+    process = subprocess.call("nc -l "+port+" > temp/streamlit_detection_image_2.jpg",stdout=subprocess.PIPE, shell = True)
+    stdout, stderr = process.communicate()
+    lines = stdout.readlines()
+    print(f"lines: {lines}")
+    print("something happened. hopefully image transfer happened.")
     #transmit_message("nah id win","rianbutala","172.16.9.135", "/home/rianbutala/Desktop/face-recognition/bse_face_recognition", "pipassword")
 
 #transmit_message("please tell me this works bro\n", "172.16.9.135", "1234")
@@ -37,4 +42,4 @@ def monitor_for_image(port):
 #monitor_for_message("1234")
 
 #transmit_message("nah id lose\n", "172.16.0.159", "1234")
-transmit_image("temp/streamlit_detection_image.jpg", "172.16.0.159", "1234")
+transmit_image("temp/streamlit_detection_image.jpg", "172.16.3.32", "1234")
