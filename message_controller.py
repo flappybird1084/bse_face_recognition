@@ -31,8 +31,8 @@ def transmit_image(image_path, ip, port):
 def monitor_for_image(port):
     print("debug: monitoring for image")
     process = subprocess.call("nc -l "+port+" > temp/streamlit_detection_image_2.jpg",stdout=subprocess.PIPE, shell = True)
-    lines = process.stdout.readlines()
-    print(f"lines: {lines}")
+    #lines = process.stdout.readlines()
+    #print(f"lines: {lines}")
     print("something happened. hopefully image transfer happened.")
     #transmit_message("nah id win","rianbutala","172.16.9.135", "/home/rianbutala/Desktop/face-recognition/bse_face_recognition", "pipassword")
 
