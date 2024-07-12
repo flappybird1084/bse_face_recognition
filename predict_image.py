@@ -39,10 +39,10 @@ def pre_image(model, image_path):
     #_,cv2img = video_capture.read()
     boxes, _ = mtcnn.detect(cv2img)
 
-    color_converted = cv2.cvtColor(cv2img, cv2.COLOR_BGR2RGB) 
+    color_converted = cv2.cvtColor(cv2img, cv2.COLOR_BGR2RGB)
 
     pilcv2img = Image.fromarray(color_converted).copy()
-   
+
     frame_draw = pilcv2img.copy()
     draw = ImageDraw.Draw(frame_draw)
 
@@ -60,9 +60,9 @@ def pre_image(model, image_path):
     except:
         print("caught!!")
         cropped_img = pilcv2img.copy()
-        
 
-    
+
+
     img = frame_draw.copy()
     open_cv_image = numpy.array(img)
     open_cv_image = open_cv_image[:, :, ::-1].copy()
@@ -81,9 +81,9 @@ def pre_image(model, image_path):
     key = cv2.waitKey(1) & 0xff
 
 
-    mean = [0.485, 0.456, 0.406] 
+    mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
-    transform_norm = transforms.Compose([transforms.ToTensor(), 
+    transform_norm = transforms.Compose([transforms.ToTensor(),
     transforms.Resize((224,224)),transforms.Normalize(mean, std)])
     # get normalized image
 
@@ -93,7 +93,7 @@ def pre_image(model, image_path):
         # input = Variable(image_tensor)
         img_normalized = img_normalized.to(device)
         # print(img_normalized.shape)
-       
+
     except:
         img_normalized = transform_norm(img).float()
         img_normalized = img_normalized.unsqueeze_(0)
@@ -103,7 +103,7 @@ def pre_image(model, image_path):
         # print(img_normalized.shape)
 
     with torch.no_grad():
-        model.eval()  
+        model.eval()
         output =model(img_normalized)
         print(output)
         index = output.data.cpu().numpy().argmax()

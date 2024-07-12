@@ -19,7 +19,6 @@ def get_avg_diff(inp_list, verbose):
     # fps is 1/this
     return avg
 
-
 def compile_video(directory_name, verbose):
     try:
         target_fps = 0
@@ -64,6 +63,7 @@ def compile_video(directory_name, verbose):
         process = subprocess.call(["ffmpeg -i "+video_name+" -vcodec libx264 "+final_video_name], stdout=subprocess.PIPE, shell=True)
         process = subprocess.call(["rm "+video_name], stdout=subprocess.PIPE, shell=True)
         print("ffmpeg ended. video removed.")
+    
     except Exception as e:
         print("critical error!!")
         print(e)
@@ -81,9 +81,9 @@ def get_date(filename, verbose):
     if verbose:
         print(filename[index_dash+1:index_atsign].split("-")) # 2024, 06, 26: y/m/d
 
-    return (filename[index_dash+1:index_atsign].split("-")) 
+    return (filename[index_dash+1:index_atsign].split("-"))
 
-def is_file_too_old(baseline, comparison, days, verbose): #with some caveats. for simplicity if year or month doesnt match it says too old. 
+def is_file_too_old(baseline, comparison, days, verbose): #with some caveats. for simplicity if year or month doesnt match it says too old.
     if verbose:
         print(f"checking to see if {comparison} is {days} days older than {baseline}")
 
@@ -94,7 +94,7 @@ def is_file_too_old(baseline, comparison, days, verbose): #with some caveats. fo
         if verbose:
             print ("year mismatch!!")
         return True
-    
+
     if int(date_baseline[1]) - int(date_comparison[1]) != 0: #if month is different
         if verbose:
             print ("month mismatch!!")
@@ -144,7 +144,7 @@ def recompile_all_cvdetections(directory_name, verbose):
             recompile_video_to_h264(i, i[2:], directory_name)
     if verbose:
         print(stdout)
-    
+
 
 #autoremove_old_files("./detections/videos/", 7, False)
 #recompile_all_cvdetections("detections/videos", False)
