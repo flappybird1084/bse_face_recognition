@@ -30,7 +30,7 @@ def transmit_image(image_path, ip, port):
 
 def monitor_for_image(port):
     print("debug: monitoring for image")
-    process = subprocess.call("nc -l "+port+" > temp/streamlit_detection_image_2.jpg",stdout=subprocess.PIPE, shell = True)
+    process = subprocess.Popen("nc -l "+port+" > temp/streamlit_detection_image_2.jpg",stdout=subprocess.PIPE, shell = True)
     #lines = process.stdout.readlines()
     #print(f"lines: {lines}")
     print("something happened. hopefully image transfer happened.")
