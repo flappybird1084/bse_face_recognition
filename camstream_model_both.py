@@ -22,7 +22,7 @@ import numpy
 from datetime import datetime
 from threading import Thread
 
-from message_controller import transmit_message
+from message_controller import transmit_message, transmit_image
 from videoutils import compile_video, autoremove_old_files, recompile_all_cvdetections
 
 try:
@@ -246,6 +246,9 @@ def pre_image():
 
 
                 autoremove_old_files("./detections/videos/", 7, False) #clean up old videos. not really peak efficiency 
+
+            transmit_image("temp/streamlit_detection_image.jpg", "172.16.3.32", "1234")
+
 
         else:
             transmit_message("\nmost likely: "+"[no face detected]"+"\n"+("not rian") +"\n", TARGET_IP, TARGET_PORT) #send message to port
