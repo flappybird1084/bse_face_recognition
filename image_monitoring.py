@@ -7,7 +7,7 @@ def display_loop():
         image = cv2.imread("temp/streamlit_detection_image.jpg")
         cv2.imshow("frame", image)
 
-t = Thread(display_loop)
+t = Thread(target=display_loop)
 t.run()
 while True:
     monitor_for_image("1234")
