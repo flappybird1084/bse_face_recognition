@@ -43,4 +43,5 @@ def monitor_for_image(port):
 #monitor_for_message("1234")
 
 #transmit_message("nah id lose\n", "172.16.0.159", "1234")
+
 transmit_image("temp/streamlit_detection_image.jpg", "172.16.3.32", "1234")
