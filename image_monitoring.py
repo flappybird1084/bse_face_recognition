@@ -2,6 +2,7 @@ from message_controller import monitor_for_image
 import cv2
 from threading import Thread
 import time
+from videoutils import resize_cv_image
 
 def display_loop():
     print("display thread started")
@@ -9,6 +10,7 @@ def display_loop():
         print("about to show image")
         try:
             image = cv2.imread("temp/streamlit_detection_image.jpg")
+            image = resize_cv_image(image)
             cv2.imshow("frame", image)
             print("image shown")
             cv2.waitKey(1)

@@ -249,7 +249,7 @@ def pre_image():
 
                 autoremove_old_files("./detections/videos/", 7, False) #clean up old videos. not really peak efficiency 
 
-            transmit_image("temp/streamlit_detection_image.jpg", "172.16.3.32", TARGET_PORT_IMAGE)
+            transmit_image("temp/streamlit_detection_image.jpg", TARGET_IP, TARGET_PORT_IMAGE)
 
 
         else:
