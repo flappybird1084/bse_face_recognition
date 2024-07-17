@@ -1,7 +1,4 @@
 import streamlit as st
-import pandas as pd
-import time
-from threading import Thread
 import os, subprocess
 
 from PIL import ImageFile

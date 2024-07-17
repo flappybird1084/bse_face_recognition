@@ -21,7 +21,7 @@ def transmit_message(message, ip, port):
 def monitor_for_message(port):
     process = subprocess.Popen("nc -l "+port, stdout=subprocess.PIPE,shell=True)
     read = str(process.stdout.readlines())[3:-4]
-    #raw output: [b'nah id lose\n']
+    #raw output: [b'message\n']
     print(read) 
 
 def transmit_image(image_path, ip, port):
@@ -36,12 +36,6 @@ def monitor_for_image(port):
     print("something happened. hopefully image transfer happened.")
     process = subprocess.call("mv temp/streamlit_detection_image_2.jpg temp/streamlit_detection_image.jpg", shell = True)
     print("file renamed")
-    #transmit_message("nah id win","rianbutala","172.16.9.135", "/home/rianbutala/Desktop/face-recognition/bse_face_recognition", "pipassword")
+   
 
-#transmit_message("please tell me this works bro\n", "172.16.9.135", "1234")
-
-#monitor_for_message("1234")
-
-#transmit_message("nah id lose\n", "172.16.0.159", "1234")
-
-transmit_image("temp/streamlit_detection_image.jpg", "172.16.3.32", "1234")
+#transmit_image("temp/streamlit_detection_image.jpg", "172.16.3.32", "1234")

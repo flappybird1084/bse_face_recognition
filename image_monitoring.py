@@ -23,7 +23,7 @@ def monitor_loop():
     print("monitor thread started")
     while True:
         print("about to monitor for image")
-        monitor_for_image("1234")
+        monitor_for_image("1235")
         print("image found")
         time.sleep(0.25)
 

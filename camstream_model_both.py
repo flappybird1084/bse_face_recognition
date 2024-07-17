@@ -48,9 +48,11 @@ device_recognition = torch.device(device_str_recognition)
 
 mtcnn = MTCNN(keep_all=True, device=torch.device('cpu'))
 
-#TARGET_IP = "172.16.9.135"
-TARGET_IP = "172.16.4.45"
-TARGET_PORT = "1234"
+TARGET_IP = "172.16.1.139" # pi 1
+#TARGET_IP = "172.16.3.32" #pi 2
+#TARGET_IP = "172.16.4.45" #laptop
+TARGET_PORT_MESSAGE = "1234"
+TARGET_PORT_IMAGE = "1235"
 
 session_directory = ""
 successful_detections = "000000000"
@@ -218,7 +220,7 @@ def pre_image():
             #get_tensor_percentages(class_names, output)
             index_recognition = output.data.cpu().numpy().argmax()
             print("is rian" if index_recognition == 1 else "not rian")
-            transmit_message(("\nmost likely: "+class_names[index]+"\n"+("is rian" if index_recognition == 1 else "not rian")) +"\n", TARGET_IP, TARGET_PORT)
+            transmit_message(("\nmost likely: "+class_names[index]+"\n"+("is rian" if index_recognition == 1 else "not rian")) +"\n", TARGET_IP, TARGET_PORT_MESSAGE)
 
             font = ImageFont.truetype(r'SimplyMono-Book.ttf',30)
             draw.text(xy=(boxes[0][0],boxes[0][1]),text=("is rian" if index_recognition == 1 else "not rian")+"\n"+"most likely: "+class_names[index],font=font)
@@ -247,11 +249,11 @@ def pre_image():
 
                 autoremove_old_files("./detections/videos/", 7, False) #clean up old videos. not really peak efficiency 
 
-            transmit_image("temp/streamlit_detection_image.jpg", "172.16.3.32", "1234")
+            transmit_image("temp/streamlit_detection_image.jpg", "172.16.3.32", TARGET_PORT_IMAGE)
 
 
         else:
-            transmit_message("\nmost likely: "+"[no face detected]"+"\n"+("not rian") +"\n", TARGET_IP, TARGET_PORT) #send message to port
+            transmit_message("\nmost likely: "+"[no face detected]"+"\n"+("not rian") +"\n", TARGET_IP, TARGET_PORT_MESSAGE) #send message to port
             print("no face detected")
             successful_detections = successful_detections+"0" #compile video if no faces detected
             if len(successful_detections) > 100:
