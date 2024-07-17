@@ -2,7 +2,26 @@ from message_controller import monitor_for_image
 import cv2
 from threading import Thread
 import time
-from videoutils import resize_cv_image
+import numpy
+#from videoutils import resize_cv_image
+
+def convert_cv_to_pil(image):
+    color_coverted = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) 
+    pil_image = Image.fromarray(color_coverted) 
+    return pil_image
+
+def convert_pil_to_cv(image):
+    open_cv_image = numpy.array(image)
+    open_cv_image = open_cv_image[:, :, ::-1].copy()
+    return open_cv_image
+
+
+def resize_cv_image(image, newsize):
+    image = convert_cv_to_pil(image)
+    image = image.resize(size=newsize)
+    image = convert_pil_to_cv(image)
+    return image
+
 
 def display_loop():
     print("display thread started")
@@ -10,7 +29,7 @@ def display_loop():
         print("about to show image")
         try:
             image = cv2.imread("temp/streamlit_detection_image.jpg")
-            image = resize_cv_image(image)
+            image = resize_cv_image(image, newsize=(240,240))
             cv2.imshow("frame", image)
             print("image shown")
             cv2.waitKey(1)

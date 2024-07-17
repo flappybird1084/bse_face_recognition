@@ -1,5 +1,6 @@
-import cv2
+import cv2, numpy
 import os, subprocess
+from PIL import Image
 
 def get_avg_diff(inp_list, verbose):
     target_list = []
@@ -144,6 +145,25 @@ def recompile_all_cvdetections(directory_name, verbose):
             recompile_video_to_h264(i, i[2:], directory_name)
     if verbose:
         print(stdout)
+
+def convert_cv_to_pil(image):
+    color_coverted = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) 
+    pil_image = Image.fromarray(color_coverted) 
+    return pil_image
+
+def convert_pil_to_cv(image):
+    open_cv_image = numpy.array(image)
+    open_cv_image = open_cv_image[:, :, ::-1].copy()
+    return open_cv_image
+
+
+def resize_cv_image(image, newsize):
+    image = convert_cv_to_pil(image)
+    image = image.resize(size=newsize)
+    image = convert_pil_to_cv(image)
+    return image
+
+
 
 
 #autoremove_old_files("./detections/videos/", 7, False)
