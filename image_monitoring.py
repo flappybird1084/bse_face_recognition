@@ -3,6 +3,7 @@ import cv2
 from threading import Thread
 import time
 import numpy
+from PIL import Image
 #from videoutils import resize_cv_image
 
 def convert_cv_to_pil(image):
