@@ -27,3 +27,4 @@ Cool stuff I learned:
 - ```pgrep -a python3``` does a grep on only processes named python3 (for killing nohup) and ```pgrep python3``` will return only process id
 - ```whatis crontab``` (shell) shows list of available man pages -> ```man 5 crontab```
 - rc.local script to run stuff on restart: ```bash /home/rianbutala/Desktop/face-recognition-pi2/bse_face_recognition/deploy_all.sh || exit 1```<br>```exit 0```
+- .config/autostart/image_monitor.desktop: script that launches on pi boot to monitor for images constantly
