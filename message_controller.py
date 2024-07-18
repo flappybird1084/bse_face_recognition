@@ -23,9 +23,10 @@ def monitor_for_message(port):
     read = str(process.stdout.readlines())[3:-4]
     #raw output: [b'message\n']
     print(read) 
+    return read
 
 def transmit_image(image_path, ip, port):
-    subprocess.Popen("nc "+ip+" "+port+" -w 1 < "+image_path, stdin=subprocess.PIPE, shell=True)
+    subprocess.call("nc "+ip+" "+port+" -w 1 < "+image_path, stdin=subprocess.PIPE, shell=True)
 
 
 def monitor_for_image(port):

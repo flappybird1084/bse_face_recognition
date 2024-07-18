@@ -30,8 +30,9 @@ def display_loop():
         print("about to show image")
         try:
             image = cv2.imread("temp/streamlit_detection_image.jpg")
-            image = resize_cv_image(image, newsize=(400,200))
-            cv2.imshow("frame", image)
+            image = resize_cv_image(image, newsize=(400,250))
+            cv2.imshow("frame-image", image)
+            cv2.moveWindow("frame-image", 0,0)
             print("image shown")
             cv2.waitKey(1)
         except Exception as e:
