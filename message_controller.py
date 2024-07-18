@@ -1,4 +1,5 @@
 import os, subprocess, time
+from multiprocessing import Process
 
 '''def transmit_message_scp(message, username ,ip , filepath, remotepassword):
     os.popen("touch temp.txt")
@@ -26,7 +27,16 @@ def monitor_for_message(port):
     return read
 
 def transmit_image(image_path, ip, port):
+    #    p = Process(target=subprocess.call("nc "+ip+" "+port+" -w 1 < "+image_path, stdin=subprocess.PIPE, shell=True))
+    #    p.start()
+    #    p.join()
     subprocess.call("nc "+ip+" "+port+" -w 1 < "+image_path, stdin=subprocess.PIPE, shell=True)
+
+def loop_transmit_image(image_path, ip, port):
+    while True:
+        print(f"transmitting image to {port}@{ip}")
+        transmit_image(image_path=image_path, ip=ip, port=port)
+        time.sleep(0.5)
 
 
 def monitor_for_image(port):

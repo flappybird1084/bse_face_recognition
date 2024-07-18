@@ -21,8 +21,9 @@ from facenet_pytorch import MTCNN
 import numpy
 from datetime import datetime
 from threading import Thread
+from multiprocessing import Process
 
-from message_controller import transmit_message, transmit_image
+from message_controller import transmit_message, transmit_image, loop_transmit_image
 from videoutils import compile_video, autoremove_old_files, recompile_all_cvdetections
 
 try:
@@ -56,6 +57,9 @@ TARGET_PORT_IMAGE = "1235"
 
 session_directory = ""
 successful_detections = "000000000"
+
+font = ImageFont.truetype(r'SimplyMono-Book.ttf',30)
+
 
 def get_number_from_tensor(tensor):
     strtensor = str(tensor)
@@ -106,7 +110,7 @@ def convert_directory_to_video(session_directory):
     print("directory removed!!")
 
 def pre_image():
-    global successful_detections, session_directory
+    global successful_detections, session_directory, font
 
     recompile_all_cvdetections("detections/videos", False)
 
@@ -222,7 +226,6 @@ def pre_image():
             print("is rian" if index_recognition == 1 else "not rian")
             transmit_message(("\nmost likely: "+class_names[index]+"\n"+("is rian" if index_recognition == 1 else "not rian")) +"\n", TARGET_IP, TARGET_PORT_MESSAGE)
 
-            font = ImageFont.truetype(r'SimplyMono-Book.ttf',30)
             draw.text(xy=(boxes[0][0],boxes[0][1]),text=("is rian" if index_recognition == 1 else "not rian")+"\n"+"most likely: "+class_names[index],font=font)
 
             #print(index)
@@ -249,7 +252,9 @@ def pre_image():
 
                 autoremove_old_files("./detections/videos/", 7, False) #clean up old videos. not really peak efficiency 
 
-            transmit_image("temp/streamlit_detection_image.jpg", TARGET_IP, TARGET_PORT_IMAGE)
+            # t = Thread(target=transmit_image("temp/streamlit_detection_image.jpg", TARGET_IP, TARGET_PORT_IMAGE))
+            # t.start()
+            
 
 
         else:
@@ -296,9 +301,15 @@ stdout, stderr = process.communicate()
 for i in stdout.split(bytes("\n", encoding="utf8")):
     uncompiled_folders.append(i.decode())
 uncompiled_folders = uncompiled_folders[:-2]
-print(uncompiled_folders)
+print(f"uncompiled folders: {uncompiled_folders}")
 for i in uncompiled_folders:
     convert_directory_to_video(i)
+
+print("image transmit thread initializing")  
+image_transmission_thread = Thread(target=loop_transmit_image, args=("temp/streamlit_detection_image.jpg", TARGET_IP, TARGET_PORT_IMAGE))  
+print("image transmit thread initialized")  
+image_transmission_thread.start()  
+print("image transmit thread started")
 
 while(True):
     pre_image()
