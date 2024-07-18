@@ -21,7 +21,9 @@ def resize_cv_image(image, newsize):
     return image
 
 while True:
-    read_lines = monitor_for_message("1234")
+    monitor_for_message("1234")
+    with open("temp/temp_status_message.txt", "r") as file:
+        read_lines = file.readlines()
     #read_lines = "hello\nyes"
     new_img = Image.new("RGB", (400,100))
     draw_img = new_img.copy()

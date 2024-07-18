@@ -20,11 +20,18 @@ def transmit_message(message, ip, port):
     #os.popen("rm temp/temp_status_message.txt")
 
 def monitor_for_message(port):
-    process = subprocess.Popen("nc -l "+port, stdout=subprocess.PIPE,shell=True)
-    read = str(process.stdout.readlines())[3:-4]
-    #raw output: [b'message\n']
-    print(read) 
-    return read
+    print("debug: monitoring for message")
+    process = subprocess.call("nc -l "+port+" > temp/temp_status_message_2.txt",stdout=subprocess.PIPE, shell = True)
+    #lines = process.stdout.readlines()
+    #print(f"lines: {lines}")
+    print("something happened. hopefully image message happened.")
+    process = subprocess.call("mv temp/temp_status_message_2.txt temp/temp_status_message.txt", shell = True)
+    print("file renamed")
+    # process = subprocess.Popen("nc -l "+port, stdout=subprocess.PIPE,shell=True)
+    # read = str(process.stdout.readlines())[3:-4]
+    # #raw output: [b'message\n']
+    # print(read) 
+    # return read
 
 def transmit_image(image_path, ip, port):
     #    p = Process(target=subprocess.call("nc "+ip+" "+port+" -w 1 < "+image_path, stdin=subprocess.PIPE, shell=True))
