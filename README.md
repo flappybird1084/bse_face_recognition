@@ -28,3 +28,8 @@ Cool stuff I learned:
 - ```whatis crontab``` (shell) shows list of available man pages -> ```man 5 crontab```
 - rc.local script to run stuff on restart: ```bash /home/rianbutala/Desktop/face-recognition-pi2/bse_face_recognition/deploy_all.sh || exit 1```<br>```exit 0```
 - .config/autostart/image_monitor.desktop: script that launches on pi boot to monitor for images constantly
+- Shown below: contents to add to .desktop file
+- [Desktop Entry]
+- Type=Application
+- Name=Clock
+- Exec=/usr/bin/python3 /home/pi/clock.py
